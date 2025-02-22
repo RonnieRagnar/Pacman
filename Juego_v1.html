@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        canvas {
+            background-color: black;
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen text-white">
+    <h1 class="text-3xl font-bold mb-4">Pac-Man Clone</h1>
+    <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <p class="mt-4">Usa las teclas de flecha para mover a Pac-Man</p>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const pacMan = { x: 50, y: 50, size: 20, dx: 0, dy: 0 };
+        const speed = 2;
+
+        function drawPacMan() {
+            ctx.beginPath();
+            ctx.arc(pacMan.x, pacMan.y, pacMan.size, 0.2 * Math.PI, 1.8 * Math.PI);
+            ctx.lineTo(pacMan.x, pacMan.y);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pacMan.x += pacMan.dx;
+            pacMan.y += pacMan.dy;
+            drawPacMan();
+            requestAnimationFrame(update);
+        }
+
+        function keyDown(e) {
+            if (e.key === "ArrowRight") { pacMan.dx = speed; pacMan.dy = 0; }
+            if (e.key === "ArrowLeft") { pacMan.dx = -speed; pacMan.dy = 0; }
+            if (e.key === "ArrowUp") { pacMan.dy = -speed; pacMan.dx = 0; }
+            if (e.key === "ArrowDown") { pacMan.dy = speed; pacMan.dx = 0; }
+        }
+
+        function keyUp(e) {
+            if (["ArrowRight", "ArrowLeft"].includes(e.key)) pacMan.dx = 0;
+            if (["ArrowUp", "ArrowDown"].includes(e.key)) pacMan.dy = 0;
+        }
+
+        document.addEventListener("keydown", keyDown);
+        document.addEventListener("keyup", keyUp);
+        update();
+    </script>
+</body>
+</html>
